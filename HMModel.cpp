@@ -225,11 +225,10 @@ void HMModel::startFromCoefficient()
 		{
 			double offset = 0;
 			if (j==0)
-				offset = log(delta)+inferData.data[i].logMap;
+				offset = log(delta/2)+log(inferData.data[i].expected);
 			else
-				offset = log(j*1.0)+inferData.data[i].logMap;
-			mu[i][j] = exp(newintercept+offset+
-					coefficientforgc*inferData.data[i].hFuntionGC);
+				offset = log(j*1.0/2)+log(inferData.data[i].expected);
+			mu[i][j] = exp(offset);
 		}
 	}
 

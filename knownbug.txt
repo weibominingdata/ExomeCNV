@@ -1,0 +1,1 @@
+1. On rare situation, there will be size one CNV adjacent to other CNV. I need to solve this. However, right now these are just removed.

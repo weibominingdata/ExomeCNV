@@ -242,7 +242,7 @@ void HMModel::calculateMuAndPhiAllStatesCombined(bool init)
 
 	// for state 0
 	// load weights, load fitted value, in original scale, estimate phi
-	int maxIt = 25;
+	int maxIt = 100;
 	double convR = 1e-8;
 	int nCovariate = 1;          // CN
 	double *y = new double[nSTATES*nLength];

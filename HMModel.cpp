@@ -205,7 +205,7 @@ void HMModel::startFromCoefficient()
 	cout << nSTATES << " " << normalStates << endl;
 
 
-	double delta = 0.5;
+	double delta = 0.1;
 	double coefficientforgc = 0.5;
 
 	cout << delta << " " << coefficientforgc << " " << endl;
@@ -253,7 +253,7 @@ void HMModel::calculateMuAndPhiAllStatesCombined(bool init)
 	double *resid = new double[nSTATES*nLength]; 
 	double *Xb = new double[nSTATES*nLength*nCovariate];  // used in the program
 	double *offset = new double[nSTATES*nLength];         // offset, now log(state) is a offset
-	double delta = 0.5; // delta for cn0
+	double delta = 0.1; // delta for cn0
 
 	// loaded x, y, z, fitted, weights
 	// y x are not dependant with initial value
@@ -279,7 +279,7 @@ void HMModel::calculateMuAndPhiAllStatesCombined(bool init)
 	index = 0;
 	for(int i = 0; i < nLength; ++i)
 	{
-		for(int j = 1; j < nSTATES; ++j)
+		for(int j = 0; j < nSTATES; ++j)
 		{
 			offset[index++] =log(inferData.data[i].expected+0.1);
 		}

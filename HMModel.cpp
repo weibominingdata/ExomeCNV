@@ -205,7 +205,7 @@ void HMModel::startFromCoefficient()
 	cout << nSTATES << " " << normalStates << endl;
 
 
-	double delta = 0.1;
+	double delta = 0.01;
 	double coefficientforgc = 0.5;
 
 	cout << delta << " " << coefficientforgc << " " << endl;
@@ -253,7 +253,7 @@ void HMModel::calculateMuAndPhiAllStatesCombined(bool init)
 	double *resid = new double[nSTATES*nLength]; 
 	double *Xb = new double[nSTATES*nLength*nCovariate];  // used in the program
 	double *offset = new double[nSTATES*nLength];         // offset, now log(state) is a offset
-	double delta = 0.1; // delta for cn0
+	double delta = 0.01; // delta for cn0
 
 	// loaded x, y, z, fitted, weights
 	// y x are not dependant with initial value
@@ -346,7 +346,7 @@ void HMModel::calculateMuAndPhiAllStatesCombined(bool init)
 	dim[1] = nCovariate;  
 	dim[2] = maxIt; //
 	dim[3] = 0; // false
-	dim[4] = 1; // false, no offset
+	dim[4] = 1; // true, no offset
 
 	int nIter = 0;
 	int linkR = LOG;
@@ -402,13 +402,24 @@ void HMModel::calculateMuAndPhiAllStatesCombined(bool init)
 	delete []offset;
 
 
-		int cvPhi = MathTools::phi_ml(y, fitted, nLength*nSTATES, prior, maxIt,
-			convR, &phi[0], 0, 0);
+
 		//if (phi[0]>20)
 		//	phi[0]=20;
-		for(int j = 1; j < nSTATES; ++j)
+		for(int j = 0; j < nSTATES; ++j)
 		{
-			phi[j] = phi[0];
+			double *y_stateJ=new double [nLength];
+			double *x_stateJ=new double [nLength];
+			double *prior_stateJ=new double[nLength];
+			for(int i=0; i<nLength; ++i){
+				y_stateJ[i]=y[nSTATES*i+j];
+				x_stateJ[i]=fitted[nSTATES*i+j];
+				prior_stateJ[i]=prior[nSTATES*i+j];
+			}
+			int cvPhi = MathTools::phi_ml(y_stateJ,x_stateJ, nLength, prior_stateJ, maxIt,
+						convR, &phi[j], 0, 0);
+			delete []y_stateJ;
+			delete []x_stateJ;
+			delete []prior_stateJ;
 		}
 
 
